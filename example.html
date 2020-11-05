@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://bkr-sdk.s3.amazonaws.com/js/bkr-sdk.min.js"></script>
+    <script>
+        // Consultar parametros id y token por mail, a la siguiente direccion: sdk {at} bkr.com.ar.
+        const id    = 0;
+        const token = "store_token";
+        let comment = "BKR SDK payment";
+
+        const bkr = new window.BKR(token, id);
+
+        let payment_ref    = "order_123";
+        let payment_amount = 100;
+
+        function pay(amount) {
+            bkr.checkout(payment_ref, amount, comment)
+                .then(result => {
+                    if (result.status === 'processed') {
+                        document.getElementById("message").innerHTML = "Tu pago fue exitoso.";
+                        document.getElementById("message").disabled = true;
+                    }
+                    if (result.status === 'canceled') {
+                        document.getElementById("message").innerHTML = "Tu pago fue cancelado.";
+                        document.getElementById("message").disabled = true;
+                    }
+                })
+                .catch(err => document.getElementById("message").innerHTML = "Error!!");
+        }
+    </script>
+</head>
+<body>
+    <button id="message" onclick="pay(payment_amount)">Haz click para pagar</button>
+</body>
+</html>
